@@ -1,0 +1,3 @@
+﻿  jogoGalo.cpp
+C:\Users\rpcun\Documents\code\jogoGalo\jogoGalo.cpp(118,19): warning C4244: 'argumento': conversão de 'time_t' para 'unsigned int', possível perda de dados
+  jogoGalo.vcxproj -> C:\Users\rpcun\Documents\code\jogoGalo\x64\Debug\jogoGalo.exe

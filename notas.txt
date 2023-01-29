@@ -1,0 +1,14 @@
+-modo single
+	-pedir o nome do user --------------------
+	-aprefeiçoar mensagens de vitoria/derrota/empate ---------------------
+	-criar menu para apresentar depois disso com as opçoes reiniciar/voltar/sair
+	-criar loading para vez do cpu
+
+-modo multi
+	-por fazer
+
+-extras
+	-colocar a opçao voltar nos varios menus
+	-colocar registo de vitorias/empates/derrotas para o modo single atraves de txt
+	-criar mais uma opçao no meno single com as classificaçoes
+	-tentar eliminar variavel global
