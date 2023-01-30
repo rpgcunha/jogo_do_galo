@@ -5,10 +5,10 @@
 #include <ctype.h>
 #include <cstdlib>
 #include <ctime>
+#include <chrono>
+#include <thread>
+
 using namespace std;
-
-
-string pos[9];
 
 void cabecalho()
 {
@@ -36,6 +36,27 @@ void tabuleiro(string posicao[9])
     cout << "    |___|___|___|          |___|___|___|\n";
     cout << endl;
     cout << endl;
+}
+
+void delay(int milliseconds) {
+    this_thread::sleep_for(chrono::milliseconds(milliseconds));
+}
+
+void loading(string pos[9])
+{
+    string loading[3] = { ".", "..", "..." };
+    for (size_t i = 0; i < 3; i++)
+    {
+        for (size_t i = 0; i < 3; i++)
+        {
+            cabecalho();
+            tabuleiro(pos);
+            cout << "O cpu esta a escolher a posicao:" << loading[i];
+            delay(500);
+            system("cls");
+        }
+    }
+
 }
 
 void Taca()
@@ -108,7 +129,7 @@ void Draw()
     cout << "" << endl;
 }
 
-void EscolherRandom()
+void EscolherRandom(string pos[9])
 {
     int livre = false;
     int jogada;
@@ -126,7 +147,7 @@ void EscolherRandom()
 
 }
 
-int FecharLinha()
+int FecharLinha(string pos[9])
 {
     if (pos[0] == "O" && pos[1] == "O" && pos[2] == " ")
     {
@@ -252,7 +273,7 @@ int FecharLinha()
     return 0;
 }
 
-int VerificarFim(string simbolo)
+int VerificarFim(string simbolo, string pos[9])
 {
     if (pos[0] == simbolo && pos[1] == simbolo && pos[2] == simbolo)
     {
@@ -289,7 +310,7 @@ int VerificarFim(string simbolo)
     return 0;
 }
 
-void EscolhaUser(string nome)
+void EscolhaUser(string nome, int jogador, string pos[9])
 {
     bool livre = false;
     char temp;
@@ -316,7 +337,14 @@ void EscolhaUser(string nome)
         if (pos[jogada] == " ")
         {
             livre = true;
-            pos[jogada] = "X";
+            if (jogador == 0)
+            {
+                pos[jogada] = "X";
+            }
+            else
+            {
+                pos[jogada] = "O";
+            }
         }
         else
         {
@@ -325,7 +353,7 @@ void EscolhaUser(string nome)
     } while (livre == false);
 }
 
-int CortarLinhaDificil()
+int CortarLinhaDificil(string pos[9])
 {
     if (pos[0] == "X" && pos[1] == "X" && pos[2] == " ")
     {
@@ -450,7 +478,7 @@ int CortarLinhaDificil()
     return 0;
 }
 
-int CortarLinhaNormal()
+int CortarLinhaNormal(string pos[9])
 {
     if (pos[0] == "X" && pos[1] == "X" && pos[2] == " ")
     {
@@ -520,7 +548,46 @@ int CortarLinhaNormal()
     return 0;
 }
 
-string facil(string nome)
+int sorteio(string nomes[2])
+{
+    int tempo = 800;
+    srand(time(0));
+    int random = rand() % 1;
+
+    for (size_t j   = 0; j < 7; j++)
+    {
+        for (size_t i = 0; i < 2; i++)
+        {
+            cabecalho();
+            cout << "          O primeiro a jogar e: \n";
+            cout << endl;
+            cout << "          **********************" << endl;
+            cout << "                   " << nomes[i] << endl;
+            cout << "          **********************" << endl;
+            delay(tempo);
+            tempo = tempo - 50;
+            system("cls");
+        }
+    }
+    cabecalho();
+    cout << "          O primeiro a jogar e: \n";
+    cout << endl;
+    cout << "          **********************" << endl;
+    cout << "                   " << nomes[random] << endl;
+    cout << "          **********************" << endl;
+
+
+    if (random == 1)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+string facil(string nome, string pos[9])
 {
     string vez = "user";
     bool livre = false;
@@ -531,11 +598,11 @@ string facil(string nome)
         //se for a vez do jogador
         if (vez == "user")
         {
-            EscolhaUser(nome);
+            EscolhaUser(nome, 0, pos);
             vez = "cpu";
             contador++;
             system("cls");
-            if (VerificarFim("X") == 1)
+            if (VerificarFim("X", pos) == 1)
             {
                 return "venceu";
             }
@@ -547,18 +614,19 @@ string facil(string nome)
         }
         else //vez do cpu
         {
-            if (FecharLinha()==1)
+            loading(pos);
+            if (FecharLinha(pos)==1)
             {
                 return "perdeu";
             }
             else
             {
-                EscolherRandom();
+                EscolherRandom(pos);
             }
             vez = "user";
             contador++;
             system("cls");
-            if (VerificarFim("O")==1)
+            if (VerificarFim("O", pos)==1)
             {
                 return "perdeu";
             }
@@ -566,7 +634,7 @@ string facil(string nome)
     } while (true);
 }
 
-string Normal(string nome)
+string Normal(string nome, string pos[9])
 {
     string vez = "user";
     bool livre = false;
@@ -577,11 +645,11 @@ string Normal(string nome)
         //se for a vez do jogador
         if (vez == "user")
         {
-            EscolhaUser(nome);
+            EscolhaUser(nome, 0, pos);
             vez = "cpu";
             contador++;
             system("cls");
-            if (VerificarFim("X") == 1)
+            if (VerificarFim("X", pos) == 1)
             {
                 return "venceu";
             }
@@ -593,21 +661,22 @@ string Normal(string nome)
         }
         else
         {
-            if (FecharLinha() == 1)
+            loading(pos);
+            if (FecharLinha(pos) == 1)
             {
                 return "perdeu";
             }
             else
             {
-                if (CortarLinhaNormal()==0)
+                if (CortarLinhaNormal(pos)==0)
                 {
-                    EscolherRandom();
+                    EscolherRandom(pos);
                 }
             }
             vez = "user";
             contador++;
             system("cls");
-            if (VerificarFim("O") == 1)
+            if (VerificarFim("O", pos) == 1)
             {
                 return "perdeu";
             }
@@ -615,7 +684,7 @@ string Normal(string nome)
     } while (true);
 }
 
-string Dificil(string nome)
+string Dificil(string nome, string pos[9])
 {
     string vez = "user";
     bool livre = false;
@@ -626,11 +695,11 @@ string Dificil(string nome)
         //se for a vez do jogador
         if (vez == "user")
         {
-            EscolhaUser(nome);
+            EscolhaUser(nome, 0, pos);
             vez = "cpu";
             contador++;
             system("cls");
-            if (VerificarFim("X") == 1)
+            if (VerificarFim("X", pos) == 1)
             {
                 return "venceu";
             }
@@ -642,21 +711,22 @@ string Dificil(string nome)
         }
         else
         {
-            if (FecharLinha() == 1)
+            loading(pos);
+            if (FecharLinha(pos) == 1)
             {
                 return "perdeu";
             }
             else
             {
-                if (CortarLinhaDificil() == 0)
+                if (CortarLinhaDificil(pos) == 0)
                 {
-                    EscolherRandom();
+                    EscolherRandom(pos);
                 }
             }
             vez = "user";
             contador++;
             system("cls");
-            if (VerificarFim("O") == 1)
+            if (VerificarFim("O", pos) == 1)
             {
                 return "perdeu";
             }
@@ -664,11 +734,12 @@ string Dificil(string nome)
     } while (true);
 }
 
-void single()
+int single(string pos[9])
 {
-    int dificuldade;
+    int escolha;
     char temp = 0;
     string resultado, nome;
+    bool reiniciar = false;
 
     //definer nome do utilizador
     cabecalho();
@@ -677,79 +748,234 @@ void single()
     //ciclo para escolher a dificuldade, so avança depois de escolher uma opçao valida
     do
     {
-        cabecalho();
-        cout << "************************************\n";
-        cout << "*                                  *\n";
-        cout << "*             Escolha              *\n";
-        cout << "*                                  *\n";
-        cout << "*            1 - Facil             *\n";
-        cout << "*                                  *\n";
-        cout << "*            2 - Normal            *\n";
-        cout << "*                                  *\n";
-        cout << "*            3 - Dificil           *\n";
-        cout << "*                                  *\n";
-        cout << "************************************\n\n\n";
-        cout << nome << " escolha o modo de Jogo: ";
-
-        char c = getchar();
-        if (isdigit(c))
+        reiniciar = false;
+        do
         {
-            dificuldade = atoi(&c);
-            if (dificuldade == 1 || dificuldade == 2 || dificuldade ==3)
+            cabecalho();
+            cout << "************************************\n";
+            cout << "*                                  *\n";
+            cout << "*             Escolha              *\n";
+            cout << "*                                  *\n";
+            cout << "*            1 - Facil             *\n";
+            cout << "*                                  *\n";
+            cout << "*            2 - Normal            *\n";
+            cout << "*                                  *\n";
+            cout << "*            3 - Dificil           *\n";
+            cout << "*                                  *\n";
+            cout << "*                                  *\n";
+            cout << "*            4 - Voltar            *\n";
+            cout << "*                                  *\n";
+            cout << "************************************\n\n\n";
+            cout << nome << " escolha o modo de Jogo: ";
+
+            char c = getchar();
+            if (isdigit(c))
             {
-                temp = 1;
+                escolha = atoi(&c);
+                if (escolha == 1 || escolha == 2 || escolha == 3 || escolha == 4)
+                {
+                    temp = 1;
+                }
             }
+            system("cls");
+        } while (temp == 0);
+        //avança para a dificuldade escolhida
+        switch (escolha)
+        {
+        case 1:
+            resultado = facil(nome, pos);
+            break;
+        case 2:
+            resultado = Normal(nome, pos);
+            break;
+        case 3:
+            resultado = Dificil(nome, pos);
+            break;
+        case 4:
+            return 0;
+        default:
+            break;
+        }
+        //verifica o resultado do jogo e apresenta mensagem
+        if (resultado == "venceu")
+        {
+            cabecalho();
+            tabuleiro(pos);
+            Taca();
+            cout << "Parabens " << nome << " Venceu!!";
+        }
+        if (resultado == "perdeu")
+        {
+            cabecalho();
+            tabuleiro(pos);
+            Caveira();
+            cout << nome << " que pena, perdeu!!";
+        }
+        if (resultado == "empate")
+        {
+            cabecalho();
+            tabuleiro(pos);
+            Draw();
+            cout << nome << " voce empatou!!";
+        }
+        //pede ao jogador para pressionar uma tecla para continuar
+        cout << endl;
+        cout << "Pressione uma tecla para continuar...";
+        temp = _getch();
+        system("cls");
+        //apresenta o menu de fim de jogo
+        do
+        {
+            temp = 0;
+            cabecalho();
+            cout << "************************************\n";
+            cout << "*                                  *\n";
+            cout << "*             Escolha              *\n";
+            cout << "*                                  *\n";
+            cout << "*          1 - Reiniciar           *\n";
+            cout << "*                                  *\n";
+            cout << "*          2 - Voltar              *\n";
+            cout << "*                                  *\n";
+            cout << "*          3 - Sair                *\n";
+            cout << "*                                  *\n";
+            cout << "************************************\n";
+            cout << nome << " escolha uma opcao: ";
+
+            char c = getchar();
+            if (isdigit(c))
+            {
+                escolha = atoi(&c);
+                if (escolha == 1 || escolha == 2 || escolha == 3)
+                {                    
+                    temp = 1;
+                }
+            }
+            system("cls");
+
+        } while (temp == 0);
+        //executa a açao escolhida pelo utilizador
+        switch (escolha)
+        {
+        // reinicia o jogo
+        case 1:
+            reiniciar = true;
+            escolha = 0;
+            temp = 0;
+            for (size_t i = 0; i < 9; i++)
+            {
+                pos[i] = " ";
+            }
+            break;
+        //volta ao menu anterior
+        case 2:
+            escolha = 0;
+            temp = 0;
+            for (size_t i = 0; i < 9; i++)
+            {
+                pos[i] = " ";
+            }
+            return 0;
+        //sai da aplicaçao
+        case 3:
+            exit(0);
+        default:
+            break;
+        }
+    } while (reiniciar);
+}
+
+void multi(string pos[9])
+{
+    string nomes[2], jogador[2];
+    char temp;
+
+    cabecalho();
+    cout << "Insira o nome do primeiro jogador: "; cin >> nomes[0];
+    cout << "Insira o nome do segundo jogador: "; cin >> nomes[1];
+    system("cls");
+
+    int primeiro = sorteio(nomes);
+
+    cout << endl;
+    cout << endl;
+
+    cout << "Pressione uma tecla para continuar...";
+    temp = _getch();
+
+    system("cls");
+
+    if (primeiro == 0)
+    {
+        jogador[0] = nomes[0];
+        jogador[1] = nomes[1];
+    }
+    else
+    {
+        jogador[0] = nomes[1];
+        jogador[1] = nomes[0];
+    }
+
+    int vez = 0;
+    int contador = 0;
+    string resultado = "";
+    do
+    {
+        EscolhaUser(jogador[vez], vez, pos);
+        contador++;
+        if (vez == 0)
+        {
+            vez = 1;
+        }
+        else
+        {
+            vez = 0;
+        }
+        if (VerificarFim("X", pos) == 1)
+        {
+            resultado = jogador[0];
+        }
+        if (VerificarFim("O", pos) == 1)
+        {
+            resultado = jogador[1];
+        }
+        //verifica se ja nao ha mais casas livre e anuncia empate
+        if (contador == 9)
+        {
+            resultado = "empate";
         }
         system("cls");
-    } while (temp==0);
-    //avança para a dificuldade escolhida
-    switch (dificuldade)
-    {
-    case 1:
-        resultado = facil(nome);
-        break;
-    case 2 :
-        resultado = Normal(nome);
-        break;
-    case 3:
-        resultado = Dificil(nome);
-        break;
-    default:
-        break;
-    }
-
-    if (resultado=="venceu")
-    {
-        cabecalho();
-        tabuleiro(pos);
-        Taca();
-        cout << "Parabens " << nome << " Venceu!!";
-    }
-    if (resultado == "perdeu")
-    {
-        cabecalho();
-        tabuleiro(pos);
-        Caveira();
-        cout << nome << " que pena, perdeu!!";
-    }
+    } while (resultado == "");
+    
     if (resultado == "empate")
     {
         cabecalho();
         tabuleiro(pos);
         Draw();
-        cout << nome << " voce empatou!!";
+        cout << nomes[0] << " e " << nomes[1] << " voces empataram!!";
+    }
+    else
+    {
+        cabecalho();
+        tabuleiro(pos);
+        Taca();
+        cout << "Parabens " << resultado << " voce venceu!!";
     }
 
+    cout << endl;
+    cout << "Pressione uma tecla para continuar...";
+    temp = _getch();
+    system("cls");
 }
 
 int main()
 {
     //declarar e inicializar var
-    bool sair = false;
     char temp;
-    int modo;
+    int escolha;
+    bool repetir;
+    string pos[9];
 
-
+    //inicializar as pos
     for (int i = 0; i < 9; i++)
     {
         pos[i] = " ";
@@ -763,39 +989,57 @@ int main()
     cout << "Pressione uma tecla para continuar...";
     temp = _getch();
     system("cls");
-
-    //escolher single ou multi
     do
     {
-        temp = 0;
-        cabecalho();
-        cout << "************************************\n";
-        cout << "*                                  *\n";
-        cout << "*             Escolha              *\n";
-        cout << "*                                  *\n";
-        cout << "*         1 - Um jogador           *\n";
-        cout << "*                                  *\n";
-        cout << "*       2 - Dois jogadores         *\n";
-        cout << "*                                  *\n";
-        cout << "*                                  *\n";
-        cout << "************************************\n\n\n";
-        cout << "Escolha o modo de Jogo: ";
-        //verifica se o escolhido foi uma das opçoes
-        char c = getchar();
-        if (isdigit(c)) //verifica se é numero
+        repetir = false;
+        //escolher single ou multi
+        do
         {
-            modo = atoi(&c); //converte de char para int
-            if (modo == 1 || modo == 2)
+            temp = 0;
+            cabecalho();
+            cout << "************************************\n";
+            cout << "*                                  *\n";
+            cout << "*             Escolha              *\n";
+            cout << "*                                  *\n";
+            cout << "*         1 - Um jogador           *\n";
+            cout << "*                                  *\n";
+            cout << "*       2 - Dois jogadores         *\n";
+            cout << "*                                  *\n";
+            cout << "*            3 - Sair              *\n";
+            cout << "*                                  *\n";
+            cout << "************************************\n\n\n";
+            cout << "Escolha o modo de Jogo: ";
+            //verifica se o escolhido foi uma das opçoes
+            char c = getchar();
+            if (isdigit(c)) //verifica se é numero
             {
-                temp = 1;
+                escolha = atoi(&c); //converte de char para int
+                if (escolha == 1 || escolha == 2 || escolha == 3)
+                {
+                    temp = 1;
+                }
             }
-        }
+            system("cls");
+        } while (temp == 0);
         system("cls");
-    } while (temp == 0);
-    system("cls");
-    //verifica qual o modo de jogo escolhido
-    if (modo == 1)
-    {
-        single();
-    }    
+        //verifica qual o modo de jogo escolhido
+        switch (escolha)
+        {
+        case 1:
+            single(pos);
+            repetir = true;
+            escolha = 0;
+            break;
+        case 2:
+            multi(pos);
+            repetir = true;
+            escolha = 0;
+            break;
+        case 3:
+            exit(0);
+        default:
+            break;
+        }
+    } while (repetir);
+
 }

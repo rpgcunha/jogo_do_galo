@@ -1,2 +1,3 @@
 C:\Users\Admin\Documents\formação\jogoGalo\x64\Debug\jogoGalo.exe
 C:\Users\rpcun\Documents\code\jogoGalo\x64\Debug\jogoGalo.exe
+C:\Users\Admin\Downloads\jogoGalo\jogoGalo\x64\Debug\jogoGalo.exe
