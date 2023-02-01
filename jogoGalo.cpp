@@ -102,7 +102,7 @@ int RegistoPontuacao(string nome, int derrotas, int empates, int vitorias)
     }
 }
 
-string LerPontuacao()
+int LerPontuacao()
 {
     ifstream ler("pontuacao.txt", ios::app);
 
@@ -118,8 +118,15 @@ string LerPontuacao()
         int i = 0;
         while (getline(ler, linha))
         {
-            
+            tabela[i] = linha;
+            i++;
         }
+        cout << "Nome - Derrotas - Empates - Vitorias" << endl;
+        for (size_t j = 0; j < i; j++)
+        {
+            cout << tabela[j] << endl;
+        }
+        ler.close();
     }
 }
 
@@ -794,6 +801,8 @@ int single(string pos[9])
     string resultado, nome;
     bool reiniciar = false;
     string lixo;
+    int vitorias=0, empates=0, derrotas=0;
+
 
     //definer nome do utilizador
     cabecalho();
@@ -828,7 +837,7 @@ int single(string pos[9])
             if (isdigit(c))
             {
                 escolha = atoi(&c);
-                if (escolha == 1 || escolha == 2 || escolha == 3 || escolha == 4)
+                if (escolha == 1 || escolha == 2 || escolha == 3 || escolha == 4 || escolha == 5)
                 {
                     temp = 1;
                 }
@@ -849,6 +858,8 @@ int single(string pos[9])
             break;
         case 4:
             return 0;
+        case 5:
+            LerPontuacao();
         default:
             break;
         }
@@ -859,6 +870,7 @@ int single(string pos[9])
             tabuleiro(pos);
             Taca();
             cout << "Parabens " << nome << " Venceu!!";
+            vitorias++;
         }
         if (resultado == "perdeu")
         {
@@ -866,6 +878,7 @@ int single(string pos[9])
             tabuleiro(pos);
             Caveira();
             cout << nome << " que pena, perdeu!!";
+            derrotas++;
         }
         if (resultado == "empate")
         {
@@ -873,6 +886,7 @@ int single(string pos[9])
             tabuleiro(pos);
             Draw();
             cout << nome << " voce empatou!!";
+            vitorias++;
         }
         //pede ao jogador para pressionar uma tecla para continuar
         cout << endl;
@@ -930,9 +944,11 @@ int single(string pos[9])
             {
                 pos[i] = " ";
             }
+            RegistoPontuacao(nome, derrotas, empates, vitorias);
             return 0;
         //sai da aplicaçao
         case 3:
+            RegistoPontuacao(nome, derrotas, empates, vitorias);
             exit(0);
         default:
             break;
@@ -1049,9 +1065,9 @@ int main()
     //apresentacao
     cabecalho();
     tabuleiro(pos);
-    cout << "Escolha a posicao onde quer jogar pelo guia de posicoes.\n";
+    cout << "A esquerda tem o guia de posicoes e a direita o tabuleiro.\n";
     cout << endl;
-    cout << "Pressione uma tecla para continuar...";
+    cout << "Pressione uma tecla para iniciar o jogo...";
     temp = _getch();
     system("cls");
     do
