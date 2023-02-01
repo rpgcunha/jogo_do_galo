@@ -1,5 +1,7 @@
 ﻿  jogoGalo.cpp
-C:\Users\Admin\Downloads\jogoGalo\jogoGalo\jogoGalo.cpp(139,19): warning C4244: 'argumento': conversão de 'time_t' para 'unsigned int', possível perda de dados
-C:\Users\Admin\Downloads\jogoGalo\jogoGalo\jogoGalo.cpp(554,15): warning C4244: 'argumento': conversão de 'time_t' para 'unsigned int', possível perda de dados
-C:\Users\Admin\Downloads\jogoGalo\jogoGalo\jogoGalo.cpp(885): warning C4715: 'single': nem todos os caminhos de controle retornam um valor
-  jogoGalo.vcxproj -> C:\Users\Admin\Downloads\jogoGalo\jogoGalo\x64\Debug\jogoGalo.exe
+C:\Users\admin\Desktop\formacao_git\jogo_do_galo\jogoGalo.cpp(188,19): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\admin\Desktop\formacao_git\jogo_do_galo\jogoGalo.cpp(604,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\admin\Desktop\formacao_git\jogo_do_galo\jogoGalo.cpp(103): warning C4715: 'RegistoPontuacao': not all control paths return a value
+C:\Users\admin\Desktop\formacao_git\jogo_do_galo\jogoGalo.cpp(941): warning C4715: 'single': not all control paths return a value
+C:\Users\admin\Desktop\formacao_git\jogo_do_galo\jogoGalo.cpp(124): warning C4715: 'LerPontuacao': not all control paths return a value
+  jogoGalo.vcxproj -> C:\Users\admin\Desktop\formacao_git\jogo_do_galo\x64\Debug\jogoGalo.exe

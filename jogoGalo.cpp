@@ -7,6 +7,8 @@
 #include <ctime>
 #include <chrono>
 #include <thread>
+#include <fstream>
+
 
 using namespace std;
 
@@ -38,11 +40,19 @@ void tabuleiro(string posicao[9])
     cout << endl;
 }
 
+void CabecalhoDificuldade(string dificuldade)
+{
+    cout << endl;
+    cout << "             Dificuldade: " << dificuldade;
+    cout << endl;
+    cout << endl;
+}
+
 void delay(int milliseconds) {
     this_thread::sleep_for(chrono::milliseconds(milliseconds));
 }
 
-void loading(string pos[9])
+void loading(string pos[9], string dificuldade)
 {
     string loading[3] = { ".", "..", "..." };
     for (size_t i = 0; i < 3; i++)
@@ -50,6 +60,7 @@ void loading(string pos[9])
         for (size_t i = 0; i < 3; i++)
         {
             cabecalho();
+            CabecalhoDificuldade(dificuldade);
             tabuleiro(pos);
             cout << "O cpu esta a escolher a posicao:" << loading[i];
             delay(500);
@@ -72,6 +83,44 @@ void Taca()
     cout << "               _.' '._" << endl;
     cout << "              `````````" << endl;
     cout << endl;
+}
+
+int RegistoPontuacao(string nome, int derrotas, int empates, int vitorias)
+{
+    ofstream escrever("pontuacao.txt", ios::app);
+
+    if (!escrever.is_open())
+    {
+        cout << "pontuacao.txt nao pode ser aberto" << endl;
+        return 0;
+    }
+    else
+    {
+        escrever << nome << "-" << derrotas << "-" << empates << "-" << vitorias << endl;
+
+        escrever.close();
+    }
+}
+
+string LerPontuacao()
+{
+    ifstream ler("pontuacao.txt", ios::app);
+
+    if (!ler.is_open())
+    {
+        cout << "pontuacao.txt nao pode ser aberto" << endl;
+        return 0;
+    }
+    else
+    {
+        string linha;
+        string tabela[25];
+        int i = 0;
+        while (getline(ler, linha))
+        {
+            
+        }
+    }
 }
 
 void Caveira()
@@ -310,13 +359,14 @@ int VerificarFim(string simbolo, string pos[9])
     return 0;
 }
 
-void EscolhaUser(string nome, int jogador, string pos[9])
+void EscolhaUser(string nome, int jogador, string pos[9], string dificulade)
 {
     bool livre = false;
     char temp;
     int jogada;
 
     cabecalho();
+    CabecalhoDificuldade(dificulade);
     tabuleiro(pos);
     do
     {
@@ -559,7 +609,7 @@ int sorteio(string nomes[2])
         for (size_t i = 0; i < 2; i++)
         {
             cabecalho();
-            cout << "          O primeiro a jogar e: \n";
+            cout << "        A sortear o primeiro a jogar: \n";
             cout << endl;
             cout << "          **********************" << endl;
             cout << "                   " << nomes[i] << endl;
@@ -570,11 +620,14 @@ int sorteio(string nomes[2])
         }
     }
     cabecalho();
-    cout << "          O primeiro a jogar e: \n";
+    cout << "        A sortear o primeiro a jogar: \n";
     cout << endl;
     cout << "          **********************" << endl;
     cout << "                   " << nomes[random] << endl;
     cout << "          **********************" << endl;
+    cout << endl;
+    cout << endl;
+    cout << "        O primeiro a jogar e " << nomes[random];
 
 
     if (random == 1)
@@ -587,7 +640,7 @@ int sorteio(string nomes[2])
     }
 }
 
-string facil(string nome, string pos[9])
+string facil(string nome, string pos[9], string dificuldade)
 {
     string vez = "user";
     bool livre = false;
@@ -598,7 +651,7 @@ string facil(string nome, string pos[9])
         //se for a vez do jogador
         if (vez == "user")
         {
-            EscolhaUser(nome, 0, pos);
+            EscolhaUser(nome, 0, pos, dificuldade);
             vez = "cpu";
             contador++;
             system("cls");
@@ -614,7 +667,7 @@ string facil(string nome, string pos[9])
         }
         else //vez do cpu
         {
-            loading(pos);
+            loading(pos, dificuldade);
             if (FecharLinha(pos)==1)
             {
                 return "perdeu";
@@ -634,7 +687,7 @@ string facil(string nome, string pos[9])
     } while (true);
 }
 
-string Normal(string nome, string pos[9])
+string Normal(string nome, string pos[9], string dificuldade)
 {
     string vez = "user";
     bool livre = false;
@@ -645,7 +698,7 @@ string Normal(string nome, string pos[9])
         //se for a vez do jogador
         if (vez == "user")
         {
-            EscolhaUser(nome, 0, pos);
+            EscolhaUser(nome, 0, pos, dificuldade);
             vez = "cpu";
             contador++;
             system("cls");
@@ -661,7 +714,7 @@ string Normal(string nome, string pos[9])
         }
         else
         {
-            loading(pos);
+            loading(pos, dificuldade);
             if (FecharLinha(pos) == 1)
             {
                 return "perdeu";
@@ -684,7 +737,7 @@ string Normal(string nome, string pos[9])
     } while (true);
 }
 
-string Dificil(string nome, string pos[9])
+string Dificil(string nome, string pos[9], string dificuldade)
 {
     string vez = "user";
     bool livre = false;
@@ -695,7 +748,7 @@ string Dificil(string nome, string pos[9])
         //se for a vez do jogador
         if (vez == "user")
         {
-            EscolhaUser(nome, 0, pos);
+            EscolhaUser(nome, 0, pos, dificuldade);
             vez = "cpu";
             contador++;
             system("cls");
@@ -711,7 +764,7 @@ string Dificil(string nome, string pos[9])
         }
         else
         {
-            loading(pos);
+            loading(pos, dificuldade);
             if (FecharLinha(pos) == 1)
             {
                 return "perdeu";
@@ -740,10 +793,13 @@ int single(string pos[9])
     char temp = 0;
     string resultado, nome;
     bool reiniciar = false;
+    string lixo;
 
     //definer nome do utilizador
     cabecalho();
-    cout << "Digite o seu nome: "; cin >> nome;
+    cout << "Digite o seu nome: "; 
+    getline(cin, lixo);
+    getline(cin, nome);
     system("cls");
     //ciclo para escolher a dificuldade, so avança depois de escolher uma opçao valida
     do
@@ -783,13 +839,13 @@ int single(string pos[9])
         switch (escolha)
         {
         case 1:
-            resultado = facil(nome, pos);
+            resultado = facil(nome, pos, "Facil");
             break;
         case 2:
-            resultado = Normal(nome, pos);
+            resultado = Normal(nome, pos, "Normal");
             break;
         case 3:
-            resultado = Dificil(nome, pos);
+            resultado = Dificil(nome, pos, "Dificil");
             break;
         case 4:
             return 0;
@@ -888,10 +944,14 @@ void multi(string pos[9])
 {
     string nomes[2], jogador[2];
     char temp;
+    string lixo;
 
     cabecalho();
-    cout << "Insira o nome do primeiro jogador: "; cin >> nomes[0];
-    cout << "Insira o nome do segundo jogador: "; cin >> nomes[1];
+    cout << "Insira o nome do primeiro jogador: "; 
+    getline(cin, lixo);
+    getline(cin, nomes[0]);
+    cout << "Insira o nome do segundo jogador: ";
+    getline(cin, nomes[1]);
     system("cls");
 
     int primeiro = sorteio(nomes);
@@ -920,7 +980,7 @@ void multi(string pos[9])
     string resultado = "";
     do
     {
-        EscolhaUser(jogador[vez], vez, pos);
+        EscolhaUser(jogador[vez], vez, pos, "Nao aplicavel");
         contador++;
         if (vez == 0)
         {
@@ -965,6 +1025,11 @@ void multi(string pos[9])
     cout << "Pressione uma tecla para continuar...";
     temp = _getch();
     system("cls");
+    //reset ao tabuleiro
+    for (int i = 0; i < 9; i++)
+    {
+        pos[i] = " ";
+    }
 }
 
 int main()
