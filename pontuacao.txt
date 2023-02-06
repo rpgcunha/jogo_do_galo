@@ -1,8 +1,8 @@
-rui pedro-0-0-3
-rui pedro-0-0-3
-rui pedro-0-0-3
-rui pedro-0-0-3
-rui pedro-0-0-3
-rui pedro-0-0-3
-rui pedro-0-0-3
-rui-0-0-0
+rui 8 0 3
+joaquim 10 0 3
+ines 0 1 3
+abilio 5 0 3
+salvador 0 2 3
+maria 10 0 3
+pedro 0 2 3
+biatriz 5 0 3
