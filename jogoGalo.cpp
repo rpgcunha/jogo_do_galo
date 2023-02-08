@@ -12,7 +12,6 @@
 #include <iomanip>
 
 
-
 using namespace std;
 
 void cabecalho()
@@ -806,7 +805,7 @@ int single(string pos[9])
     char temp = 0;
     string resultado;
     bool reiniciar = false;
-    string lixo, nome = "";
+    string nome = "";
     int vitorias=0, empates=0, derrotas=0;
 
 
@@ -814,7 +813,6 @@ int single(string pos[9])
     cabecalho();
     cout << "Digite o seu nome: ";
     getline(cin, nome);
-
     //so deixa avançar de nao tiver espaços
     while (nome.find(" ") != string::npos)
     {
@@ -977,7 +975,6 @@ void multi(string pos[9])
 {
     string nomes[2], jogador[2];
     char temp;
-    string lixo;
 
     cabecalho();
     cout << "Insira o nome do primeiro jogador: "; 
