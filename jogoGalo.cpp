@@ -8,6 +8,9 @@
 #include <chrono>
 #include <thread>
 #include <fstream>
+#include <sstream>
+#include <iomanip>
+
 
 
 using namespace std;
@@ -62,27 +65,12 @@ void loading(string pos[9], string dificuldade)
             cabecalho();
             CabecalhoDificuldade(dificuldade);
             tabuleiro(pos);
-            cout << "O cpu esta a escolher a posicao:" << loading[i];
+            cout << "O CPU esta a escolher a posicao:" << loading[i];
             delay(500);
             system("cls");
         }
     }
 
-}
-
-void Taca()
-{
-    cout << "             ___________" << endl;
-    cout << "            '._==_==_=_.'" << endl;
-    cout << "            .-\\:      /-." << endl;
-    cout << "           | (|:.     |) |" << endl;
-    cout << "            '-|:.     |-'" << endl;
-    cout << "              \\::.    /" << endl;
-    cout << "               '::. .'" << endl;
-    cout << "                 ) (" << endl;
-    cout << "               _.' '._" << endl;
-    cout << "              `````````" << endl;
-    cout << endl;
 }
 
 int RegistoPontuacao(string nome, int derrotas, int empates, int vitorias)
@@ -96,7 +84,7 @@ int RegistoPontuacao(string nome, int derrotas, int empates, int vitorias)
     }
     else
     {
-        escrever << nome << "-" << derrotas << "-" << empates << "-" << vitorias << endl;
+        escrever << nome << " " << derrotas << " " << empates << " " << vitorias << endl;
 
         escrever.close();
     }
@@ -113,21 +101,39 @@ int LerPontuacao()
     }
     else
     {
+        string nome[25];
+        int derrotas[25], empates[25], vitorias[25];
         string linha;
-        string tabela[25];
         int i = 0;
         while (getline(ler, linha))
         {
-            tabela[i] = linha;
+            istringstream iss(linha);
+            iss >> nome[i] >> derrotas[i] >> empates[i] >> vitorias[i];
             i++;
         }
-        cout << "Nome - Derrotas - Empates - Vitorias" << endl;
+        cout << "   Nome   -Derrotas-Empates-Vitorias" << endl;
         for (size_t j = 0; j < i; j++)
         {
-            cout << tabela[j] << endl;
+            cout << left << setw(15) << "  " + nome[j];
+            cout << setw(8) << derrotas[j] << setw(8) << empates[j] << setw(5) << vitorias[j] << endl;
         }
         ler.close();
     }
+}
+
+void Taca()
+{
+    cout << "             ___________" << endl;
+    cout << "            '._==_==_=_.'" << endl;
+    cout << "            .-\\:      /-." << endl;
+    cout << "           | (|:.     |) |" << endl;
+    cout << "            '-|:.     |-'" << endl;
+    cout << "              \\::.    /" << endl;
+    cout << "               '::. .'" << endl;
+    cout << "                 ) (" << endl;
+    cout << "               _.' '._" << endl;
+    cout << "              `````````" << endl;
+    cout << endl;
 }
 
 void Caveira()
@@ -382,7 +388,7 @@ void EscolhaUser(string nome, int jogador, string pos[9], string dificulade)
         temp = 0;
         do
         {
-            char c = getchar();
+            char c = _getch();
             if (isdigit(c))
             {
                 jogada = atoi(&c) - 1;
@@ -798,17 +804,23 @@ int single(string pos[9])
 {
     int escolha;
     char temp = 0;
-    string resultado, nome;
+    string resultado;
     bool reiniciar = false;
-    string lixo;
+    string lixo, nome = "";
     int vitorias=0, empates=0, derrotas=0;
 
 
     //definer nome do utilizador
     cabecalho();
-    cout << "Digite o seu nome: "; 
-    getline(cin, lixo);
+    cout << "Digite o seu nome: ";
     getline(cin, nome);
+
+    //so deixa avançar de nao tiver espaços
+    while (nome.find(" ") != string::npos)
+    {
+        cout << "O nome nao pode conter espacos ou estar vazio, tente novamente: ";
+        getline(cin, nome);
+    }
     system("cls");
     //ciclo para escolher a dificuldade, so avança depois de escolher uma opçao valida
     do
@@ -827,13 +839,14 @@ int single(string pos[9])
             cout << "*                                  *\n";
             cout << "*            3 - Dificil           *\n";
             cout << "*                                  *\n";
+            cout << "*          4 - Pontuacoes          *\n";
             cout << "*                                  *\n";
-            cout << "*            4 - Voltar            *\n";
+            cout << "*            5 - Voltar            *\n";
             cout << "*                                  *\n";
             cout << "************************************\n\n\n";
             cout << nome << " escolha o modo de Jogo: ";
 
-            char c = getchar();
+            char c = _getch();
             if (isdigit(c))
             {
                 escolha = atoi(&c);
@@ -857,9 +870,13 @@ int single(string pos[9])
             resultado = Dificil(nome, pos, "Dificil");
             break;
         case 4:
+            LerPontuacao();
+            cout << "\nPressione uma tecla para continuar...";
+            temp = _getch();
+            system("cls");
             return 0;
         case 5:
-            LerPontuacao();
+            return 0;
         default:
             break;
         }
@@ -911,7 +928,7 @@ int single(string pos[9])
             cout << "************************************\n";
             cout << nome << " escolha uma opcao: ";
 
-            char c = getchar();
+            char c = _getch();
             if (isdigit(c))
             {
                 escolha = atoi(&c);
@@ -964,7 +981,6 @@ void multi(string pos[9])
 
     cabecalho();
     cout << "Insira o nome do primeiro jogador: "; 
-    getline(cin, lixo);
     getline(cin, nomes[0]);
     cout << "Insira o nome do segundo jogador: ";
     getline(cin, nomes[1]);
@@ -1010,14 +1026,20 @@ void multi(string pos[9])
         {
             resultado = jogador[0];
         }
-        if (VerificarFim("O", pos) == 1)
+        else
         {
-            resultado = jogador[1];
-        }
-        //verifica se ja nao ha mais casas livre e anuncia empate
-        if (contador == 9)
-        {
-            resultado = "empate";
+            if (VerificarFim("O", pos) == 1)
+            {
+                resultado = jogador[1];
+            }
+            else
+            {
+                //verifica se ja nao ha mais casas livre e anuncia empate
+                if (contador == 9)
+                {
+                    resultado = "empate";
+                }
+            }
         }
         system("cls");
     } while (resultado == "");
@@ -1091,7 +1113,7 @@ int main()
             cout << "************************************\n\n\n";
             cout << "Escolha o modo de Jogo: ";
             //verifica se o escolhido foi uma das opçoes
-            char c = getchar();
+            char c = _getch();
             if (isdigit(c)) //verifica se é numero
             {
                 escolha = atoi(&c); //converte de char para int
@@ -1122,5 +1144,5 @@ int main()
             break;
         }
     } while (repetir);
-
 }
+
