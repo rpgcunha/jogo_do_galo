@@ -10,3 +10,4 @@ Rui 0 0 3
 Bruna 0 0 1
 Rui 1 0 0
 biatriz 5 0 3
+Rui 0 0 1

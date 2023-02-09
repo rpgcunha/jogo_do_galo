@@ -814,7 +814,7 @@ int single(string pos[9])
     cout << "Digite o seu nome: ";
     getline(cin, nome);
     //so deixa avançar de nao tiver espaços
-    while (nome.find(" ") != string::npos)
+    while (nome.find(" ") != string::npos || nome == "")
     {
         cout << "O nome nao pode conter espacos ou estar vazio, tente novamente: ";
         getline(cin, nome);
@@ -979,8 +979,18 @@ void multi(string pos[9])
     cabecalho();
     cout << "Insira o nome do primeiro jogador: "; 
     getline(cin, nomes[0]);
+    while (nomes[0]=="")
+    {
+        cout << "Tem de inserir um nome, tente novamente: ";
+        getline(cin, nomes[0]);
+    }
     cout << "Insira o nome do segundo jogador: ";
     getline(cin, nomes[1]);
+    while (nomes[1] == "")
+    {
+        cout << "Tem de inserir um nome, tente novamente: ";
+        getline(cin, nomes[1]);
+    }
     system("cls");
 
     int primeiro = sorteio(nomes);
