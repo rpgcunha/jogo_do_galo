@@ -50,12 +50,15 @@ void CabecalhoDificuldade(string dificuldade)
     cout << endl;
 }
 
-void delay(int milliseconds) {
-    this_thread::sleep_for(chrono::milliseconds(milliseconds));
+void delay(int milisegundos) 
+{
+    //cria um delay
+    this_thread::sleep_for(chrono::milliseconds(milisegundos));
 }
 
 void loading(string pos[9], string dificuldade)
 {
+    //animaçao de quando o CPU está a jogar
     string loading[3] = { ".", "..", "..." };
     for (size_t i = 0; i < 3; i++)
     {
@@ -74,8 +77,9 @@ void loading(string pos[9], string dificuldade)
 
 int RegistoPontuacao(string nome, int derrotas, int empates, int vitorias)
 {
+    //abre o ficheiro e regista o nome e as pontuações do jogador
     ofstream escrever("pontuacao.txt", ios::app);
-
+    
     if (!escrever.is_open())
     {
         cout << "pontuacao.txt nao pode ser aberto" << endl;
@@ -91,6 +95,7 @@ int RegistoPontuacao(string nome, int derrotas, int empates, int vitorias)
 
 int LerPontuacao()
 {
+    //abre o ficheiro e apresenta os dados guardados ao jogador
     ifstream ler("pontuacao.txt", ios::app);
 
     if (!ler.is_open())
@@ -192,11 +197,11 @@ void Draw()
 
 void EscolherRandom(string pos[9])
 {
+    //sorteia uma posiçao random ate escolher encontrar uma posição livre
     int livre = false;
     int jogada;
     do
     {
-        //sorteia uma posiçao random ate escolher uma livre
         srand(time(0));
         jogada = rand() % 9;
         if (pos[jogada] == " ")
@@ -210,6 +215,7 @@ void EscolherRandom(string pos[9])
 
 int FecharLinha(string pos[9])
 {
+    //verifica as combinções para tentar fechar uma linha
     if (pos[0] == "O" && pos[1] == "O" && pos[2] == " ")
     {
         pos[2] = "O";
@@ -336,6 +342,7 @@ int FecharLinha(string pos[9])
 
 int VerificarFim(string simbolo, string pos[9])
 {
+    //verifica se alguma linha esta completa 
     if (pos[0] == simbolo && pos[1] == simbolo && pos[2] == simbolo)
     {
         return 1;
@@ -373,6 +380,7 @@ int VerificarFim(string simbolo, string pos[9])
 
 void EscolhaUser(string nome, int jogador, string pos[9], string dificulade)
 {
+    //escolher uma posição livre no tabuleiro
     bool livre = false;
     char temp;
     int jogada;
@@ -417,6 +425,7 @@ void EscolhaUser(string nome, int jogador, string pos[9], string dificulade)
 
 int CortarLinhaDificil(string pos[9])
 {
+    //testa todas as linhas a ver se o jogador vai fechar alguma linha e corta
     if (pos[0] == "X" && pos[1] == "X" && pos[2] == " ")
     {
         pos[2] = "O";
@@ -542,6 +551,7 @@ int CortarLinhaDificil(string pos[9])
 
 int CortarLinhaNormal(string pos[9])
 {
+    //testa algumas linhas a ver se o jogador vai fechar alguma linha e corta
     if (pos[0] == "X" && pos[1] == "X" && pos[2] == " ")
     {
         pos[2] = "O";
@@ -612,6 +622,7 @@ int CortarLinhaNormal(string pos[9])
 
 int sorteio(string nomes[2])
 {
+    //animação para escolher o primeiro jogador no modo multi
     int tempo = 800;
     srand(time(0));
     int random = rand() % 1;
@@ -654,6 +665,7 @@ int sorteio(string nomes[2])
 
 string facil(string nome, string pos[9], string dificuldade)
 {
+    //modo de jogo facil
     string vez = "user";
     bool livre = false;
     int contador = 0;
@@ -701,6 +713,7 @@ string facil(string nome, string pos[9], string dificuldade)
 
 string Normal(string nome, string pos[9], string dificuldade)
 {
+    //modo de jogo normal
     string vez = "user";
     bool livre = false;
     int contador = 0;
@@ -751,6 +764,7 @@ string Normal(string nome, string pos[9], string dificuldade)
 
 string Dificil(string nome, string pos[9], string dificuldade)
 {
+    //modo de jogo dificil
     string vez = "user";
     bool livre = false;
     int contador = 0;
@@ -801,6 +815,7 @@ string Dificil(string nome, string pos[9], string dificuldade)
 
 int single(string pos[9])
 {
+    //modo single onde escolhe a dificuldade ou ver pontuações
     int escolha;
     char temp = 0;
     string resultado;
@@ -973,6 +988,7 @@ int single(string pos[9])
 
 void multi(string pos[9])
 {
+    //modo de jogo multi
     string nomes[2], jogador[2];
     char temp;
 
@@ -1079,7 +1095,7 @@ void multi(string pos[9])
 
 int main()
 {
-    //declarar e inicializar var
+    //menu principal
     char temp;
     int escolha;
     bool repetir;
